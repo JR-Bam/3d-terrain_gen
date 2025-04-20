@@ -12,20 +12,15 @@ extends StaticBody3D
 @export var amplitude = 40
 
 # Base noise for large mountain structures
-@export var base_noise = FastNoiseLite.new():
-	set(new_noise):
-		base_noise = new_noise
-		if Engine.is_editor_hint():
-			generate_terrain()
+@export var base_noise = FastNoiseLite.new()
 # Ridge noise for sharp peaks
-@export var ridge_noise = FastNoiseLite.new():
-	set(new_noise):
-		ridge_noise = new_noise
-		if Engine.is_editor_hint():
-			generate_terrain()
+@export var ridge_noise = FastNoiseLite.new()
 
-@onready var mesh_instance = $MeshInstance3D
+@export_range(0.0, 50.0) var water_height: float = 10.0
 
+
+func _ready() -> void:
+	generate_terrain()
 
 func generate_terrain():
 	# Configure plane mesh
@@ -67,4 +62,14 @@ func generate_terrain():
 	var surface_tool = SurfaceTool.new()
 	surface_tool.create_from(array_mesh, 0)
 	surface_tool.generate_normals()
-	mesh_instance.mesh = surface_tool.commit()
+	
+	surface_tool.get_primitive_type()
+	
+	$Mountains.mesh = surface_tool.commit()
+	$CollisionShape3D.shape = array_mesh.create_trimesh_shape()
+	
+	generate_river()
+
+func generate_river():
+	$Water.mesh.center_offset = Vector3(0.0, water_height, 0.0)
+	$Water.mesh.size = Vector2(size, size)

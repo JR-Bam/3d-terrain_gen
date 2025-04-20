@@ -18,11 +18,6 @@ void vertex() {
     // Pass vertex height and normal Y to fragment shader
     normal_y = NORMAL.y;
     vertex_y = VERTEX.y;
-	
-	if (vertex_y <= blue_level_height + sin(TIME * 0.5) * 0.3) {
-		VERTEX.y = blue_level_height;
-		VERTEX.y += sin(TIME * 0.5 + VERTEX.x * 10.0) * 0.3;
-	}
 }
 
 void fragment() {
@@ -42,9 +37,7 @@ void fragment() {
 
     // Blend snow with rock/grass based on height
 	vec3 final_albedo = mix(rockgrass_albedo, snow_albedo, snow_rockgrass_weight);
-	
-	if (vertex_y <= blue_level_height + sin(TIME * 0.5) * 0.3){
-		final_albedo = vec3(0, 0, 1);
-	}
+
+
     ALBEDO = final_albedo;
 }

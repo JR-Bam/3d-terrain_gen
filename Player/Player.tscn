@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3 uid="uid://dyhqbqld5gmjl"]
+
+[ext_resource type="Script" uid="uid://b85aue1y6rdsa" path="res://Player/Player.gd" id="1"]
+
+[sub_resource type="CapsuleShape3D" id="1"]
+
+[sub_resource type="CapsuleMesh" id="2"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0u7uh"]
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 0
+script = ExtResource("1")
+speed = 5
+jump_strength = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+shape = SubResource("1")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+far = 8192.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+visible = false
+mesh = SubResource("2")
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55324, 0)
+collision_layer = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("SphereShape3D_0u7uh")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
